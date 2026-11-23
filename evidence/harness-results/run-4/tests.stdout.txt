@@ -1,0 +1,39 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\Anupam's\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\python.exe
+cachedir: .pytest_cache
+rootdir: C:\dev\Part-1A
+configfile: pytest.ini
+plugins: anyio-4.16.0, cov-7.1.0
+collecting ... collected 14 items
+
+tests/test_book_loan_api.py::test_ac1_create_book_returns_201_and_created_book PASSED [  7%]
+tests/test_book_loan_api.py::test_ac2_invalid_book_returns_422 PASSED    [ 14%]
+tests/test_book_loan_api.py::test_ac3_duplicate_isbn_returns_409 PASSED  [ 21%]
+tests/test_book_loan_api.py::test_ac4_create_member_returns_201 PASSED   [ 28%]
+tests/test_book_loan_api.py::test_ac5_invalid_email_returns_422 PASSED   [ 35%]
+tests/test_book_loan_api.py::test_ac6_duplicate_email_returns_409 PASSED [ 42%]
+tests/test_book_loan_api.py::test_ac7_create_loan_returns_201_with_fourteen_day_due_date PASSED [ 50%]
+tests/test_book_loan_api.py::test_ac8_unavailable_book_returns_409 PASSED [ 57%]
+tests/test_book_loan_api.py::test_ac9_member_with_three_active_loans_returns_409 PASSED [ 64%]
+tests/test_book_loan_api.py::test_ac10_missing_book_or_member_returns_404 PASSED [ 71%]
+tests/test_book_loan_api.py::test_ac11_return_active_loan_returns_200_and_sets_returned_at PASSED [ 78%]
+tests/test_book_loan_api.py::test_ac12_return_already_returned_loan_returns_409 PASSED [ 85%]
+tests/test_book_loan_api.py::test_ac13_get_book_returns_current_availability_and_unknown_returns_404 PASSED [ 92%]
+tests/test_book_loan_api.py::test_ac14_overdue_returns_only_active_loans_before_today PASSED [100%]
+
+============================== warnings summary ===============================
+..\..\Users\Anupam's\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\fastapi\testclient.py:1
+  C:\Users\Anupam's\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=============================== tests coverage ================================
+______________ coverage: platform win32, python 3.12.10-final-0 _______________
+
+Name          Stmts   Miss  Cover
+---------------------------------
+src\main.py     162      1    99%
+---------------------------------
+TOTAL           162      1    99%
+Required test coverage of 80% reached. Total coverage: 99.38%
+======================== 14 passed, 1 warning in 0.53s ========================

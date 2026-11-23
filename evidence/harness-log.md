@@ -36,6 +36,17 @@ tests       PASS
 ----------------------------------
 OVERALL     FAIL
 
+### Legitimate test amendment (human-made)
+- Finding: Ruff FURB162 in tests/test_book_loan_api.py, `loaned_at = datetime.fromisoformat(body["loaned_at"].replace("Z", "+00:00"))` (seen in run-[2])
+- Agent action: the coding agent correctly declined to edit the test, citing the no-test-modification rule, and reported the finding.
+- Decision: I made a minimal lint-only change to the test line myself: removed the redundant `.replace("Z", "+00:00")`. Python 3.12 `fromisoformat` accepts "Z", so behavior is unchanged.
+- Not a weakening: no assertion, expected value, status code or test name changed. Ruff configuration is untouched.
+- Evidence: evidence/harness-results/run-[2]/test-amendment.diff, commit 123a19b
+- Re-run: run-4, result: PASS
+
+in tests/test_book_loan_api.py: remove the .replace("Z", "+00:00") and pass the string straight to fromisoformat.
+
+
 ## Final Decision:
 ACCEPT
 Limitations: 1 failure in lint
