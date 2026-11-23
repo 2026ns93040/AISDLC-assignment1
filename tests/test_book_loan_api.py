@@ -112,7 +112,7 @@ def test_ac7_create_loan_returns_201_with_fourteen_day_due_date(client):
 
     assert response.status_code == 201
     body = response.json()
-    loaned_at = datetime.fromisoformat(body["loaned_at"].replace("Z", "+00:00"))
+    loaned_at = datetime.fromisoformat(body["loaned_at"])    
     due_date = date.fromisoformat(body["due_date"])
     assert due_date == (loaned_at.date() + timedelta(days=14))
     assert body["book_id"] == book["id"]

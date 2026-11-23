@@ -19,4 +19,24 @@
 - evidence/harness-results/run-1: expected FAIL (src/ was empty). Not a repair cycle.
 
 ## 4. Run 2: first harness run on initial generation
-(filled in during Step 6)
+Harness run: run-2  (2026-11-23T20:07:08)
+----------------------------------
+lint        FAIL
+security    PASS
+tests       FAIL
+----------------------------------
+OVERALL     FAIL
+
+## 5. Run 3:
+Harness run: run-3  (2026-11-23T20:27:28)
+----------------------------------
+lint        FAIL
+security    PASS
+tests       PASS
+----------------------------------
+OVERALL     FAIL
+
+## Final Decision:
+ACCEPT
+Limitations: 1 failure in lint
+Justifications: The remaining FURB162 finding is located in tests/test_book_loan_api.py. Fixing it would require modifying a test, which is prohibited by the stated rules.
