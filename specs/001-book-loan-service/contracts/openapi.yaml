@@ -1,0 +1,203 @@
+openapi: 3.0.3
+info:
+  title: Library Book-Loan Service
+  version: 1.0.0
+  description: JSON HTTP API for catalog, membership, loans, returns, and overdue lookup.
+paths:
+  /books:
+    post:
+      operationId: createBook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookCreate'
+      responses:
+        '201':
+          description: Created book
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '409':
+          description: ISBN already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Invalid book data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /books/{id}:
+    get:
+      operationId: getBook
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: Book with current availability
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '404':
+          description: Book not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /members:
+    post:
+      operationId: createMember
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberCreate'
+      responses:
+        '201':
+          description: Created member
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+        '409':
+          description: Email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Invalid member data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /loans:
+    post:
+      operationId: createLoan
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoanCreate'
+      responses:
+        '201':
+          description: Created loan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+        '404':
+          description: Book or member not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Book unavailable or member has three active loans
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /loans/{id}/return:
+    post:
+      operationId: returnLoan
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: Returned loan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+        '404':
+          description: Loan not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Loan already returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /loans/overdue:
+    get:
+      operationId: listOverdueLoans
+      responses:
+        '200':
+          description: Active loans due before today
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Loan'
+components:
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+  schemas:
+    BookCreate:
+      type: object
+      required: [title, author, isbn, total_copies]
+      properties:
+        title: {type: string}
+        author: {type: string}
+        isbn: {type: string, pattern: '^[0-9]{13}$'}
+        total_copies: {type: integer, minimum: 1}
+    Book:
+      allOf:
+        - $ref: '#/components/schemas/BookCreate'
+        - type: object
+          required: [id, available_copies]
+          properties:
+            id: {type: integer}
+            available_copies: {type: integer, minimum: 0}
+    MemberCreate:
+      type: object
+      required: [name, email]
+      properties:
+        name: {type: string}
+        email: {type: string, format: email}
+    Member:
+      allOf:
+        - $ref: '#/components/schemas/MemberCreate'
+        - type: object
+          required: [id]
+          properties:
+            id: {type: integer}
+    LoanCreate:
+      type: object
+      required: [book_id, member_id]
+      properties:
+        book_id: {type: integer}
+        member_id: {type: integer}
+    Loan:
+      type: object
+      required: [id, book_id, member_id, loaned_at, due_date, returned_at]
+      properties:
+        id: {type: integer}
+        book_id: {type: integer}
+        member_id: {type: integer}
+        loaned_at: {type: string, format: date-time}
+        due_date: {type: string, format: date}
+        returned_at: {type: string, format: date-time, nullable: true}
+    Error:
+      type: object
+      required: [detail]
+      properties:
+        detail: {type: string}
