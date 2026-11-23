@@ -29,7 +29,6 @@ from sqlalchemy.orm import (
 )
 from sqlalchemy.pool import StaticPool
 
-
 DATABASE_URL = os.getenv("LIBRARY_DATABASE_URL", "sqlite:///library.db")
 _is_memory_database = ":memory:" in DATABASE_URL
 _engine_args = {"connect_args": {"check_same_thread": False}}
