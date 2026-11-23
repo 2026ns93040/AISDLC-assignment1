@@ -1,15 +1,32 @@
-from datetime import date, datetime, timedelta, timezone
 import os
 import re
-from threading import Lock
 from contextlib import asynccontextmanager
+from datetime import UTC, date, datetime, timedelta
+from threading import Lock
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
-from sqlalchemy import Date, DateTime, ForeignKey, Integer, String, create_engine, func, select, text
-from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, relationship, sessionmaker
+from sqlalchemy import (
+    Date,
+    DateTime,
+    ForeignKey,
+    Integer,
+    String,
+    create_engine,
+    func,
+    select,
+    text,
+)
+from sqlalchemy.orm import (
+    DeclarativeBase,
+    Mapped,
+    Session,
+    mapped_column,
+    relationship,
+    sessionmaker,
+)
 from sqlalchemy.pool import StaticPool
 
 
@@ -130,7 +147,7 @@ def _book_response(session: Session, book: Book) -> dict:
 
 
 def _utc_now() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 @asynccontextmanager
@@ -241,7 +258,7 @@ def list_overdue_loans():
         return list(
             session.scalars(
                 select(Loan).where(
-                    Loan.returned_at.is_(None), Loan.due_date < date.today()
+                    Loan.returned_at.is_(None), Loan.due_date < _utc_now().date()
                 )
             )
         )
