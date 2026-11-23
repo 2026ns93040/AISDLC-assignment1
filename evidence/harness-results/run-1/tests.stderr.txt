@@ -1,0 +1,4 @@
+ImportError while loading conftest 'C:\dev\Part-1A\tests\conftest.py'.
+tests\conftest.py:8: in <module>
+    from src.main import app
+E   ModuleNotFoundError: No module named 'src.main'

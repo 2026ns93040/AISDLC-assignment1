@@ -1,0 +1,7 @@
+Harness run: run-1  (2026-11-23T18:55:12)
+----------------------------------
+lint        FAIL
+security    PASS
+tests       FAIL
+----------------------------------
+OVERALL     FAIL
